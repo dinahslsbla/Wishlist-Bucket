@@ -73,9 +73,6 @@
         }
         .mybox > li > h2.done {
             text-decoration:line-through
-    }
-        .btn{
-            margin-left: 15px;
         }
     </style>
     <script>
@@ -83,7 +80,7 @@
             show_bucket();
         });
         function show_bucket(){
-            $('#bucket-list').empty();
+            $('#bucket-list').empty()
             $.ajax({
                 type: "GET",
                 url: "/bucket",
@@ -94,38 +91,37 @@
                         let bucket = rows[i]['bucket'];
                         let num = rows[i]['num'];
                         let done = rows[i]['done'];
-                        let temp_html = '';
-
+        
+                        let temp_html = ''
                         if (done === 0) {
                             temp_html = `
-        <li>
-            <h2>✅ ${bucket}</h2>
-            <button onclick="done_bucket(${num})" type="button" class="btn btn-outline-primary">Done!</button>
-            <button onclick="delete_bucket(${num})" type="button" class="btn btn-outline-danger">Delete!</button>
-        </li>
-                            `;
+                            <li>
+                            <h2>✅ ${bucket}</h2>
+                            <button onclick="done_bucket(${num})" type="button" class="btn btn-outline-primary">Selesai</button>
+                            <button onclick="delete_bucket(${num})" type="button" class="btn btn-outline-primary">Hapus</button> 
+                            </li>
+                            `
                         } else {
                             temp_html = `
-        <li>
-            <h2 class="done">✅ ${bucket}</h2>
-            <button onclick="delete_bucket(${num})" type="button" class="btn btn-outline-danger">Delete!</button>
-        </li>
-                            `;
+                            <li>
+                            <h2 class="done">✅ ${bucket}</h2>
+                            </li>
+                            `
                         }
-                        $('#bucket-list').append(temp_html);
+                        $('#bucket-list').append(temp_html)
                     }
                 }
             });
         }
         function save_bucket(){
-            let bucket = $('#bucket').val();
+            let bucket = $('#bucket').val()
             $.ajax({
                 type: "POST",
                 url: "/bucket",
-                data: {bucket_give: bucket},
+                data: {bucket_give:bucket},
                 success: function (response) {
-                    alert(response["msg"]);
-                    window.location.reload();
+                    alert(response["msg"])
+                    window.location.reload()
                 }
             });
         }
@@ -133,12 +129,28 @@
             $.ajax({
                 type: "POST",
                 url: "/bucket/done",
-                data: {num_give: num},
+                data: {num_give:num},
                 success: function (response) {
-                    alert(response["msg"]);
-                    window.location.reload();
+                    alert(response["msg"])
+                    window.location.reload()
                 }
             });
+        }
+        function delete_bucket(num) {
+            if (confirm("Apakah yakin ingin menghapus data ini?")) {
+                $.ajax({
+                    type: "POST",
+                    url: "/bucket/delete",
+                    data:{num_del:num},
+                    success: function (response) {
+                        alert(response["msg"]);
+                        window.location.reload();
+                    },
+                    error: function (error) {
+                        console.error("Error:", error);
+                    }
+                });
+            }
         }
     </script>
 </head>
@@ -153,6 +165,7 @@
         </div>
     </div>
     <div class="mybox" id="bucket-list">
+        
     </div>
 </body>
 </html>
